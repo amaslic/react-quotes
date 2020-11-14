@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 
 function App() {
+ const API = "https://quotesondesign.com/wp-json/wp/v2/posts/?orderby=rand";
+  const [quote, setQuote] = useState("");
+
+ const randomQuote = function(){
+	 fetch(API).then((res) => res.json()).then((data) => setQuote(data[Math.floor(Math.random() * 10)].content.rendered) )
+ }
+
+ useEffect(() => {
+  		  	randomQuote();
+  	  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+		<h3>Random quotes</h3>
+		<p dangerouslySetInnerHTML={{__html: quote}} />
+		<button onClick={randomQuote}> New quote </button>
     </div>
   );
 }
